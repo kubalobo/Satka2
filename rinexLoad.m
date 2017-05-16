@@ -2,7 +2,7 @@ function [mac, efemerydy] = rinexLoad(t)
 
 format longg;
 
-filePath = 'D:\Alicja\Documents\MATLAB\rinex.rnx';
+filePath = 'rinex.rnx';
 file  = fopen (filePath);
 
 %Loading variables 

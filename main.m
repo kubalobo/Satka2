@@ -1,5 +1,5 @@
 function [xyz, Xhat] = main(jono, tropo, radioSelected, zegar, aber)
-radioSelected
+
 c = 299792458;
 
 t = 518400;
@@ -44,14 +44,14 @@ end
 
 e = 0.5; % wilgotnosc wzgledna = 50%
 
-md = 1/sin(sqrt(e^2+6.25));
-mw = 1/sin(sqrt(e^2+2.25));
 hop1 = zeros(11, 1);
 saas1 = zeros(11, 1);
 hop2 = zeros(11,1);
 saas2 = zeros(11, 1);
 
 if(tropo)
+    md = 1/sin(sqrt(elew(i)^2+6.25));
+    mw = 1/sin(sqrt(elew(i)^2+2.25));
     for i = 1:11
         if(radioSelected == 1)
             hop1(i) = hopfield(0, deg2rad(elew(i)), md, mw);
@@ -104,7 +104,7 @@ l = odlRinex - klobWyn - hop1 + clockCor*c + timeAbber*c;
 
 roznice = l - odlGeom;
 
-Xhat = (A'*P*A)\(A'*P*roznice)
+Xhat = (A'*P*A)\(A'*P*roznice);
 
 xyz = wspPrzyblizone + Xhat(1:3)';
 
