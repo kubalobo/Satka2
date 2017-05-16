@@ -14,13 +14,13 @@ odlRinex = [20279017.485; 25716551.950; 21875028.343; 23779959.609; 23259526.375
 wspSatPop = zeros(11,3);
 odlGeom = zeros(11,1);
 
-% POPRAWKA rÃ³Å¼nicy czasu i ukÅ‚adu | odlGeom - odleglosc na podstawie przyblizen
+% POPRAWKA róznicy czasu i uk³adu | odlGeom - odleglosc na podstawie przyblizen
 for i = 1:11
     [wspSatPop(i,:), tem, odlGeom(i)] = poprawka_pozycja(wspolrzedneSatelitow(i,:), t, wspPrzyblizone);
 end
 
 % POPRAWKA JONOSFERYCZNA - KLOBUCHAR
-%E - wysokoï¿½ï¿½ horyzontalna w pï¿½okrï¿½gach - podzielona przez 180st. - w radianach
+%E - wysokoœæ horyzontalna w pó³okrêgachgach - podzielona przez 180st. - w radianach
 %A - azymut w radianach
 klobWyn = zeros(11, 1);
 elew = zeros(11, 1);
@@ -63,22 +63,30 @@ for i = 1:11
     timeAbber(i) = EccentricityTimeAbberration(efe(i, 11)^2, efe(i, 9), efe(i, 21)); 
 end
 
+
 %odlRinex - odlGeom;
+
+C = diag(1./sin(deg2rad(elew)).^2);
+P = inv(C);
+
 A = zeros(11,4);
+l = zeros(4,1);
+
 for i = 1:11
     A(i,1) = -(wspSatPop(i,1) - wspPrzyblizone(1))/odlGeom(i);
     A(i,2) = -(wspSatPop(i,2) - wspPrzyblizone(2))/odlGeom(i);
     A(i,3) = -(wspSatPop(i,3) - wspPrzyblizone(3))/odlGeom(i);
     A(i,4) = 1;
+    l(i) = odlRinex(i) + klobWyn(i) + hop1(i) - clockCor(i)- timeAbber(i);
 end
 
-l = odlRinex(i) + klobWyn(i) + hop1(i) - clockCor(i) - timeAbber(i);
 
-C = diag(1./sin(deg2rad(elew)).^2);
-P = inv(C);
 
-roznice = l - odlGeom
 
-Xhat = (A'*P*A)\(A'*P*l);
+roznice = l - odlGeom;
+
+Xhat = (A'*P*A)\(A'*P*roznice);
+
+xyz = wspPrzyblizone + Xhat(1:3)'
 
 % Jeszcze brakuje koncowego wyliczenia wspolrzednych i chyba tych dziwnych sigm
