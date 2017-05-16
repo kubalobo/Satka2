@@ -2,7 +2,7 @@ function [mac, efemerydy] = rinexLoad(t)
 
 format longg;
 
-filePath = 'D:\Studia\Semestr 4\Satka\Maciek\Projekt2\rinex.rnx';
+filePath = 'D:\Alicja\Documents\MATLAB\rinex.rnx';
 file  = fopen (filePath);
 
 %Loading variables 
@@ -64,8 +64,7 @@ for i = 1:11
     ome = 7.2921151467 * 10 ^ -5;
 
     % Alghoritm - position
-    t = 330000; %??? - moment na kt�ry wyznaczamy pozycj� w sow
-    sigmat = a0 + a1 * (t - timeGPS) + a2 * (t - timeGPS) ^ 2;
+    sigmat = a0 + a1 * (t - toe) + a2 * (t - toe) ^ 2;
     tk = t - sigmat - toe;
     a = sqrta ^ 2;
     n0 = sqrt(mi / a^3);

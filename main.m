@@ -8,27 +8,27 @@ wspPrzyblizone = [5009051.3990 -42072.4720 3935057.5040];
 odlRinex = [20279017.485; 25716551.950; 21875028.343; 23779959.609; 23259526.375; 21034103.473; 24265078.504; 20669965.650; 23270445.268; 22744417.506; 21962780.866];
 
 [wspolrzedneSatelitow, efe] = rinexLoad(t);
-%wspolrzedneSatelitow
 
 % =============== WSZYSTKIE POPRAWKI ZAPISYWANE SA W ODDZIELNYCH ZMIENNYCH ==================
 
 wspSatPop = zeros(11,3);
 odlGeom = zeros(11,1);
 
-% POPRAWKA rï¿½znicy czasu i ukï¿½adu | odlGeom - odleglosc na podstawie przyblizen
+% POPRAWKA róznicy czasu i uk³adu | odlGeom - odleglosc na podstawie przyblizen
 for i = 1:11
-    [wspSatPop(i,:), tem, odlGeom(i)] = poprawka_pozycja(wspolrzedneSatelitow(i,:), t, wspPrzyblizone);
+    [wspSatPop(i,:), tem, odlGeom(i)] = poprawka_pozycja(wspolrzedneSatelitow(i,:), efe(1,i), wspPrzyblizone);
 end
 
 % POPRAWKA JONOSFERYCZNA - KLOBUCHAR
-%E - wysokoï¿½ï¿½ horyzontalna w pï¿½okrï¿½gachgach - podzielona przez 180st. - w radianach
-%A - azymut w radianach
+%E - wysokoœæ horyzontalna w pó³okrêgachgach - podzielona przez 180st. - w
+%stopniach
+%A - azymut w stopniach
 klobWyn = zeros(11, 1);
 elew = zeros(11, 1);
 for i = 1:11
     [A, E, z, phi, lambda] = elewacja(wspPrzyblizone, wspSatPop(i,:));
 
-    klobWyn(i) = klobuchar(deg2rad(E), deg2rad(A), phi, lambda, t);
+    klobWyn(i) = klobuchar(deg2rad(E/180), deg2rad(A), phi, lambda, efe(1,i));
     elew(i) = E; % STOPNIE!
 end
 
@@ -78,15 +78,13 @@ for i = 1:11
     A(i,2) = -(wspSatPop(i,2) - wspPrzyblizone(2))/odlGeom(i);
     A(i,3) = -(wspSatPop(i,3) - wspPrzyblizone(3))/odlGeom(i);
     A(i,4) = 1;
-    l(i) = odlRinex(i) + klobWyn(i) + hop1(i) - clockCor(i)- timeAbber(i);
 end
 
-
-
+l = odlRinex - klobWyn - hop1 + clockCor*c + timeAbber*c;
 
 roznice = l - odlGeom;
 
-Xhat = (A'*P*A)\(A'*P*roznice);
+Xhat = (A'*P*A)\(A'*P*roznice)
 
 xyz = wspPrzyblizone + Xhat(1:3)';
 

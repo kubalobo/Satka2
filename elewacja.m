@@ -8,9 +8,6 @@ zo = wspPrzyblizone(3);
 wgs84 = wgs84Ellipsoid('meters');
 [phi,lambda,h] = ecef2geodetic(wgs84,xo,yo,zo);
 
-phi = deg2rad(phi);
-lambda = deg2rad(lambda);
-
 R = [-sin(phi)*cos(lambda) -sin(lambda) cos(phi)*cos(lambda);
      -sin(phi)*sin(lambda) cos(lambda) cos(phi)*sin(lambda);
       cos(phi) 0 sin(phi)];
