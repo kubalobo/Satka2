@@ -8,6 +8,9 @@ zo = wspPrzyblizone(3);
 wgs84 = wgs84Ellipsoid('meters');
 [phi,lambda,h] = ecef2geodetic(wgs84,xo,yo,zo);
 
+phi = deg2rad(phi);
+lambda = deg2rad(lambda);
+
 R = [-sin(phi)*cos(lambda) -sin(lambda) cos(phi)*cos(lambda);
      -sin(phi)*sin(lambda) cos(lambda) cos(phi)*sin(lambda);
       cos(phi) 0 sin(phi)];
@@ -17,24 +20,26 @@ xs = wspSat(1);
 ys = wspSat(2);
 zs = wspSat(3);
 
-    Xt = xs - xo;
+Xt = xs - xo;
     
-    Yt = ys - yo;
+Yt = ys - yo;
     
-    Zt = zs - zo;
+Zt = zs - zo;
 
-    Xij = [Xt;Yt;Zt];
+Xij = [Xt;Yt;Zt];
 
-    xij = R'*Xij;
+xij = R'*Xij;
     
-    n = xij(1);
-    e = xij(2);
-    u = xij(3);
+n = xij(1);
+e = xij(2);
+u = xij(3);
 
-    %azymut
-    alfa = atan2d(e,n);
-    
-    %w radianach
-    z = acosd(u/sqrt(n^2 + e^2 + u^2));
-    %w radianach
-    elew = 90 - z;
+%azymut w stopniach
+alfa = atan2d(e,n);
+
+%zenit w stopniach
+z = acosd(u/sqrt(n^2 + e^2 + u^2));
+
+%elewacja w stopniach
+elew = 90 - z;
+
