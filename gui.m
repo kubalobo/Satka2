@@ -106,8 +106,27 @@ aber = get(handles.aberCheckBox, 'Value');
 radios = get(handles.radios, 'SelectedObject');
 radioSelected = get(radios, 'String');
 
-main(jono, tropo, radioSelected, zegar, aber);
+switch radioSelected
+    case 'Hopfield statyczny'
+        rad = 1;
+    case 'Saastamoinena statyczny'
+        rad = 2;
+    case 'Hopfield Niella'
+        rad = 3;
+    case 'Saastamoinena Niella'
+        rad = 4;
+end
 
+[xyz, Xhat] = main(jono, tropo, rad, zegar, aber);
+set(handles.wX, 'String', num2str(xyz(1)));
+set(handles.wY, 'String', num2str(xyz(2)));
+set(handles.wZ, 'String', num2str(xyz(3)));
+
+set(handles.rX, 'String', num2str(Xhat(1)));
+set(handles.rY, 'String', num2str(Xhat(2)));
+set(handles.rZ, 'String', num2str(Xhat(3)));
+
+guidata(hObject,handles)
 
 
 % --------------------------------------------------------------------

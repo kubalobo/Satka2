@@ -1,4 +1,4 @@
-function [xyz, Xhat] = main(jono, tropo, radioSelected, zegar, aber)
+function [xyz] = main(jono, tropo, radioSelected, zegar, aber)
 radioSelected
 c = 299792458;
 
@@ -106,8 +106,8 @@ end
 
 roznice = l - odlGeom;
 
-Xhat = (A'*P*A)\(A'*P*roznice);
+Xhat = (A'*P*A)\(A'*P*roznice)
 
-xyz = wspPrzyblizone + Xhat(1:3)';
+xyz = wspPrzyblizone + Xhat(1:3)'
 
 % Jeszcze brakuje koncowego wyliczenia wspolrzednych i chyba tych dziwnych sigm
