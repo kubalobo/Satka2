@@ -53,6 +53,8 @@ function gui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for gui
 handles.output = hObject;
+axes(handles.obrazek);
+imshow('koalcia.jpg');
 
 % Update handles structure
 guidata(hObject, handles);
