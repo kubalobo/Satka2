@@ -8,19 +8,20 @@ wspPrzyblizone = [5009051.3990 -42072.4720 3935057.5040];
 odlRinex = [20279017.485; 25716551.950; 21875028.343; 23779959.609; 23259526.375; 21034103.473; 24265078.504; 20669965.650; 23270445.268; 22744417.506; 21962780.866];
 
 [wspolrzedneSatelitow, efe] = rinexLoad(t);
+%wspolrzedneSatelitow
 
 % =============== WSZYSTKIE POPRAWKI ZAPISYWANE SA W ODDZIELNYCH ZMIENNYCH ==================
 
 wspSatPop = zeros(11,3);
 odlGeom = zeros(11,1);
 
-% POPRAWKA róznicy czasu i uk³adu | odlGeom - odleglosc na podstawie przyblizen
+% POPRAWKA rï¿½znicy czasu i ukï¿½adu | odlGeom - odleglosc na podstawie przyblizen
 for i = 1:11
     [wspSatPop(i,:), tem, odlGeom(i)] = poprawka_pozycja(wspolrzedneSatelitow(i,:), t, wspPrzyblizone);
 end
 
 % POPRAWKA JONOSFERYCZNA - KLOBUCHAR
-%E - wysokoœæ horyzontalna w pó³okrêgachgach - podzielona przez 180st. - w radianach
+%E - wysokoï¿½ï¿½ horyzontalna w pï¿½okrï¿½gachgach - podzielona przez 180st. - w radianach
 %A - azymut w radianach
 klobWyn = zeros(11, 1);
 elew = zeros(11, 1);
@@ -87,6 +88,6 @@ roznice = l - odlGeom;
 
 Xhat = (A'*P*A)\(A'*P*roznice);
 
-xyz = wspPrzyblizone + Xhat(1:3)'
+xyz = wspPrzyblizone + Xhat(1:3)';
 
 % Jeszcze brakuje koncowego wyliczenia wspolrzednych i chyba tych dziwnych sigm
