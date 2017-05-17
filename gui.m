@@ -53,8 +53,7 @@ function gui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for gui
 handles.output = hObject;
-axes(handles.obrazek);
-imshow('koalcia.jpg');
+
 
 % Update handles structure
 guidata(hObject, handles);
@@ -107,6 +106,9 @@ aber = get(handles.aberCheckBox, 'Value');
 
 radios = get(handles.radios, 'SelectedObject');
 radioSelected = get(radios, 'String');
+
+axes(handles.obrazek);
+imshow('koalcia.jpg');
 
 switch radioSelected
     case 'Hopfield statyczny'
