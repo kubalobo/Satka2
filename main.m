@@ -1,4 +1,4 @@
-function [xyz, Xhat] = main(jono, tropo, radioSelected, zegar, aber)
+function [xyz, Xhat, wektor] = main(jono, tropo, radioSelected, zegar, aber)
 
 c = 299792458;
 
@@ -10,7 +10,7 @@ wspPrzyblizone = [5009051.3990 -42072.4720 3935057.5040];
 odlRinex = [20279017.485; 25716551.950; 21875028.343; 23779959.609; 23259526.375; 21034103.473; 24265078.504; 20669965.650; 23270445.268; 22744417.506; 21962780.866];
 
 [wspolrzedneSatelitow, efe] = rinexLoad(t);
-
+wspolrzedneSatelitow
 % =============== WSZYSTKIE POPRAWKI ZAPISYWANE SA W ODDZIELNYCH ZMIENNYCH ==================
 
 wspSatPop = zeros(11,3);
@@ -39,10 +39,8 @@ for i = 1:11
 end
 
 % POPRAWKA TROPOSFERYCZNA - HOPFIELD
-%hr - wysoko�� ortometryczna odbiornika
-%e - wysoko�� horyzontalna
-
-e = 0.5; % wilgotnosc wzgledna = 50%
+%hr - wysokosc ortometryczna odbiornika
+%e - wysokosc horyzontalna
 
 hop1 = zeros(11, 1);
 saas1 = zeros(11, 1);
@@ -93,19 +91,35 @@ P = inv(C);
 A = zeros(11,4);
 l = zeros(4,1);
 
+wspPrawdziwe = [5009051.058 -42071.954 3935057.894];
+
+
 for i = 1:11
-    A(i,1) = -(wspSatPop(i,1) - wspPrzyblizone(1))/odlGeom(i);
-    A(i,2) = -(wspSatPop(i,2) - wspPrzyblizone(2))/odlGeom(i);
-    A(i,3) = -(wspSatPop(i,3) - wspPrzyblizone(3))/odlGeom(i);
+    A(i,1) = -(wspSatPop(i,1) - wspPrawdziwe(1))/odlGeom(i);
+    A(i,2) = -(wspSatPop(i,2) - wspPrawdziwe(2))/odlGeom(i);
+    A(i,3) = -(wspSatPop(i,3) - wspPrawdziwe(3))/odlGeom(i);
     A(i,4) = 1;
 end
 
-l = odlRinex - klobWyn - hop1 + clockCor*c + timeAbber*c;
+if(radioSelected == 1)
+    tropo = hop1;
+elseif(radioSelected == 2)
+    tropo = saas1;
+elseif(radioSelected == 3)
+    tropo = hop2;
+elseif(radioSelected == 4)
+    tropo = saas2;
+end
+
+l = odlRinex - klobWyn - tropo + clockCor*c - timeAbber*c;
+
 
 roznice = l - odlGeom;
 
 Xhat = (A'*P*A)\(A'*P*roznice);
+wektor = sqrt((Xhat(1))^2 + (Xhat(2))^2 + (Xhat(3))^2);
 
-xyz = wspPrzyblizone + Xhat(1:3)';
+
+xyz = wspPrawdziwe + Xhat(1:3)';
 
 % Jeszcze brakuje koncowego wyliczenia wspolrzednych i chyba tych dziwnych sigm

@@ -2,7 +2,7 @@ function [mac, efemerydy] = rinexLoad(t)
 
 format longg;
 
-filePath = 'rinex.rnx';
+filePath = 'rinex.txt';
 file  = fopen (filePath);
 
 %Loading variables 
@@ -21,7 +21,7 @@ for i = 1:11
             second = str2double(line1(22:23));
             %time = datetime(year, month, day, hour, minute, second);
             timejd=julday(year, month, day, hour, minute, second);
-            timeGPS = GPST(timejd); %1
+            timeGPS = GPST(timejd) %1
             %[tow,gpsWeek]=Date2GPSTime(time(1),time(2),time(3),time(4)+time(5)/60+time(6)/3600); %Transform date to seconds of week
 
             a0 = str2num(line1(24:42)); %2

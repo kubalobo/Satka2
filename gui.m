@@ -121,7 +121,7 @@ switch radioSelected
         rad = 4;
 end
 
-[xyz, Xhat] = main(jono, tropo, rad, zegar, aber);
+[xyz, Xhat, wektor] = main(jono, tropo, rad, zegar, aber);
 set(handles.wX, 'String', num2str(xyz(1)));
 set(handles.wY, 'String', num2str(xyz(2)));
 set(handles.wZ, 'String', num2str(xyz(3)));
@@ -129,6 +129,9 @@ set(handles.wZ, 'String', num2str(xyz(3)));
 set(handles.rX, 'String', num2str(Xhat(1)));
 set(handles.rY, 'String', num2str(Xhat(2)));
 set(handles.rZ, 'String', num2str(Xhat(3)));
+
+
+set(handles.odl, 'String', num2str(wektor));
 
 guidata(hObject,handles)
 
