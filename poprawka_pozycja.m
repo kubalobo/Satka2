@@ -28,3 +28,5 @@ Rs = [ cos(alfa) sin(alfa) 0;
 %polozenie - moment odbioru
 rSodb = Rs * rSem';
 
+%ponowne policzenie odleglosci z poprawionymi wspolrzednymi satelity
+roRS = sqrt((rSodb(1)-wspPrzyblizone(1))^2 + (rSodb(2)-wspPrzyblizone(2))^2 + (rSodb(3)-wspPrzyblizone(3))^2);
