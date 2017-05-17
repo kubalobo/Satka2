@@ -50,13 +50,13 @@ hop2 = zeros(11,1);
 saas2 = zeros(11, 1);
 
 if(tropo)
-    md = 1/sin(sqrt(elew(i)^2+6.25));
-    mw = 1/sin(sqrt(elew(i)^2+2.25));
     for i = 1:11
+        md = 1/sin(sqrt(elew(i)^2+6.25));
+        mw = 1/sin(sqrt(elew(i)^2+2.25));
         if(radioSelected == 1)
             hop1(i) = hopfield(0, deg2rad(elew(i)), md, mw);
         elseif(radioSelected == 2)
-            saas1(i) = saastamoinen(md, mw, phi, t);
+           saas1(i) = saastamoinen(md, mw, phi);
         end
     end
 
@@ -65,9 +65,9 @@ if(tropo)
     for i = 1:11
         [md, mw] = niell(21, wspPrzyblizone, deg2rad(elew(i)));
         if(radioSelected == 3)
-            hop2(i) = hopfield(0, elew(i), md, mw);
+            hop2(i) = hopfield(0, deg2rad(elew(i)), md, mw);
         elseif(radioSelected == 4)
-            saas2(i) = saastamoinen(md, mw, phi, t);
+            saas2(i) = saastamoinen(md, mw, phi);
         end
     end
 end
@@ -77,7 +77,7 @@ clockCor = zeros(11,1);
 timeAbber = zeros(11, 1);
 for i = 1:11
     if(zegar)
-        clockCor(i) = ClockCorrections(efe(i, 2), efe(i, 3), efe(i, 4), t, efe(i, 1), efe(i, 6)); %ostatnie to deltarel - ???
+        clockCor(i) = ClockCorrections(efe(i, 2), efe(i, 3), efe(i, 4), efe(i, 1), t, timeAbber(i)); %tu nie wiem, czy wszystko jest ok
     end
     if(aber)
         timeAbber(i) = EccentricityTimeAbberration(efe(i, 11)^2, efe(i, 9), efe(i, 21)); 
